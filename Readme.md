@@ -2,6 +2,8 @@
 
 A Simple Shell Script To Commit And Push Automatically
 
+[中文文档](./Readme-CN.md)
+
 ## Usage
 
 Download the `git-auto` file
@@ -22,6 +24,26 @@ git-auto -b main -p # set git branch
 git-auto -i 30 -p # set interval seconds
 git-auto -o -p# execute once
 ```
+
+## For Windows Users
+
+Before you proceed to use the `git-auto` file, please download and install [Git Bash](https://github.com/git-for-windows/git/releases/download/v2.30.1.windows.1/Git-2.30.1-64-bit.exe).
+
+1. Just click 'yes' all the way down and you will find `Git Bash` icon in the `start`.
+
+2. Open `Git Bash`
+   Download the target repository if you don't have it locally yet:
+
+```
+git clone [your_repo_url]
+cd [your_repo_url]
+```
+For those who don't yet have a repository on Github, please refer to https://docs.github.com/en/github/getting-started-with-github/create-a-repo.
+
+3. Follow the [Usage](#Usage) section tutorial.
+
+
+> Just remember the commands in `Git Bash` are Unix shell script, not Powershell or CMD script.
 
 ## License
 
