@@ -23,6 +23,24 @@ git-auto -i 30 -p # set interval seconds
 git-auto -o -p# execute once
 ```
 
+## For Windows Users
+
+Before you proceed to use the `git-auto` file, please download and install [Git Bash](https://github.com/git-for-windows/git/releases/download/v2.30.1.windows.1/Git-2.30.1-64-bit.exe).
+
+1. Just click yes all the way down and you will find `Git Bash` icon in the `start`.
+
+2. Open `Git Bash` and download the repo you want to update to somewhere by:
+
+```
+git clone [your_repo_url]
+cd [your_repo_url]
+```
+3. Copy the `git-auto` file into this folder.
+4. Follow the [Usage](#Usage) section tutorial.
+5. (Optional) You can add this file in the `.gitignore` file to avoid uploading it.
+
+> Just remember the commands in `Git Bash` are Unix shell script, not Powershell or CMD script.
+
 ## License
 
 Copyright © 2020 Michael Wong
