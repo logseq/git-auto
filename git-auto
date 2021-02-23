@@ -20,7 +20,6 @@ push_to_server=0
 server=origin
 interval=20
 once=0
-branch=$(git rev-parse --abbrev-ref HEAD)
 
 OPTIND=1
 while getopts d:i:b:s:po flag; do
@@ -41,6 +40,10 @@ shift $((OPTIND - 1))
 
 if  [[ "${directory}" ]]; then
   cd "${directory}" || exit 1
+fi
+
+if [[ -z "${branch}" ]]; then
+  branch=$(git rev-parse --abbrev-ref HEAD)
 fi
 
 function auto-commit-and-push() {
