@@ -45,6 +45,13 @@ For those who don't yet have a repository on Github, please refer to https://doc
 
 > Just remember the commands in `Git Bash` are Unix shell script, not Powershell or CMD script.
 
+
+## Contributors
+
+Thanks for your work!
+
+[Readme-CN.md](https://github.com/defclass/git-auto/blob/master/Readme-CN.md) & Git Bash docs, by @zhanghanduo
+
 ## License
 
 Copyright © 2020 Michael Wong
