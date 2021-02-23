@@ -28,18 +28,18 @@ git-auto -o -p                          # 只执行一次
 
 在你使用`git-auto`脚本之前，请先从[Git Bash](https://github.com/git-for-windows/git/releases/download/v2.30.1.windows.1/Git-2.30.1-64-bit.exe)下载并安装`Git Bash`.
 
-1. 一路选择是安装下来,在开始菜单中就可以看到新安装的`Git Bash`图标.
+1. 一路选择"是"默认安装,在开始菜单中就可以看到新安装的`Git Bash`图标.
 
 2. 打开`Git Bash`,
    
-   如果你还没有下载Github上的仓库，可以在打开的命令行中输入:
+   如果你还没有下载Github上的目标代码仓库，可以在打开的命令行中输入:
 
 ```
-git clone [your_repo_url]
-cd [your_repo_url]
+git clone [笔记所在地址]
+cd [笔记所在地址]
 ```
 
-3. 按照上述 [使用方法](#使用方法)的教程进行操作.
+3. 按照上述 [使用方法](#使用方法)进行操作.
 
 > 在`Git Bash`中使用的指令是Unix shell语言，而不是Windows自带的Powershell语言
 

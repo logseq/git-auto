@@ -29,7 +29,7 @@ git-auto -o -p# execute once
 
 Before you proceed to use the `git-auto` file, please download and install [Git Bash](https://github.com/git-for-windows/git/releases/download/v2.30.1.windows.1/Git-2.30.1-64-bit.exe).
 
-1. Just click yes all the way down and you will find `Git Bash` icon in the `start`.
+1. Just click 'yes' all the way down and you will find `Git Bash` icon in the `start`.
 
 2. Open `Git Bash`
    Download the target repository if you don't have it locally yet:
@@ -41,7 +41,7 @@ cd [your_repo_url]
 For those who don't yet have a repository on Github, please refer to https://docs.github.com/en/github/getting-started-with-github/create-a-repo.
 
 3. Follow the [Usage](#Usage) section tutorial.
-4. (Optional) You can add this file in the `.gitignore` file to avoid uploading it.
+
 
 > Just remember the commands in `Git Bash` are Unix shell script, not Powershell or CMD script.
 
