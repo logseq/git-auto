@@ -50,7 +50,9 @@ For those who don't yet have a repository on Github, please refer to https://doc
 
 Thanks for your work!
 
-[Readme-CN.md](https://github.com/defclass/git-auto/blob/master/Readme-CN.md) & Git Bash docs, by @zhanghanduo
+PowerShell Port, by [@batkiz](https://github.com/batkiz)
+
+[Readme-CN.md](https://github.com/defclass/git-auto/blob/master/Readme-CN.md) & Git Bash docs, by [@zhanghanduo](https://github.com/zhanghanduo)
 
 ## License
 
