@@ -22,7 +22,7 @@ git-auto -p # auto commit and push
 git-auto -s origin -p # set remote server
 git-auto -b main -p # set git branch
 git-auto -i 30 -p # set interval seconds
-git-auto -o -p# execute once
+git-auto -o -p # execute once
 ```
 
 ## For Windows Users
@@ -59,7 +59,7 @@ Start-GitAutoCommit -p # auto commit and push
 Start-GitAutoCommit -s origin -p # set remote server
 Start-GitAutoCommit -b main -p # set git branch
 Start-GitAutoCommit -i 30 -p # set interval seconds
-Start-GitAutoCommit -o -p# execute once
+Start-GitAutoCommit -o -p # execute once
 ```
 
 ## Contributors
@@ -75,7 +75,3 @@ PowerShell Port, by [@batkiz](https://github.com/batkiz)
 Copyright © 2020 Michael Wong
 
 Distributed under the MIT License.
-
-
-
-
