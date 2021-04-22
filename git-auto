@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ## Tested on macOS big sur 11.2.1
 ## Usage:
@@ -46,7 +46,7 @@ if [[ -z "${branch}" ]]; then
   branch=$(git rev-parse --abbrev-ref HEAD)
 fi
 
-function auto-commit-and-push() {
+auto-commit-and-push() {
   if ! [[ $(git status) =~ "working tree clean" ]]; then
     git add .
     git commit -m "auto commit"
