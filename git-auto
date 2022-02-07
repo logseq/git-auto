@@ -5,6 +5,7 @@
 ##  git-auto ;; use current script dir as git dir, and auto commit, not push.
 ##  git-auto -d /path/to/your/note's/dir   ;; set git dir
 ##  git-auto -p ;; auto commit and push
+## git-auto -r ;; auto commit, rebase, merge, push
 ##  git-auto -s origin -p ;; set remote server
 ##  git-auto -b main -p ;; set git branch
 ##  git-auto -i 30 -p ;; set interval seconds
@@ -18,6 +19,7 @@ usage="usage: $0
     [-d <git directory>]
     [-i <interval seconds>]
     [-p <push to remote server>]
+    [-r rebase before pushing changes]
     [-s git remote server]
     [-b git branch]
     [-o <execute once]"
@@ -28,10 +30,11 @@ interval=20
 once=0
 
 OPTIND=1
-while getopts d:i:b:s:po flag; do
+while getopts d:i:b:s:pro flag; do
   case "${flag}" in
   d) directory=${OPTARG} ;;
   p) push_to_server=1 ;;
+  r) rebase=1 ;;
   o) once=1 ;;
   s) server=${OPTARG} ;;
   b) branch=${OPTARG} ;;
@@ -52,10 +55,20 @@ if [[ -z "${branch}" ]]; then
   branch=$(git rev-parse --abbrev-ref HEAD)
 fi
 
+get-commit-message() {
+    local commit_message=$(git diff --name-only HEAD~1..HEAD)
+    commit_message=$(echo "${commit_message}" | sed -e 's/^.*\///')
+    echo "${commit_message}"
+}
+
 auto-commit-and-push() {
   if ! [[ $(git status) =~ "working tree clean" ]]; then
     git add .
-    git commit -m "auto commit"
+    git commit -m "$(get-commit-message)"
+
+    if [[ 1 == ${rebase} ]]; then
+      git pull --rebase
+    fi
 
     if [[ 1 == "${push_to_server}" ]]; then
       git push "${server}" "${branch}"
