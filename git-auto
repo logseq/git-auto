@@ -1,88 +1,120 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-## Tested on macOS big sur 11.2.1
+## Tested on Arch Linux
 ## Usage:
 ##  git-auto ;; use current script dir as git dir, and auto commit, not push.
 ##  git-auto -d /path/to/your/note's/dir   ;; set git dir
-##  git-auto -p ;; auto commit and push
-## git-auto -r ;; auto commit, rebase, merge, push
-##  git-auto -s origin -p ;; set remote server
-##  git-auto -b main -p ;; set git branch
 ##  git-auto -i 30 -p ;; set interval seconds
+##  git-auto -m "Commit from desktop" ;; set commit message for all commits
+##  git-auto -b main -p ;; set git branch
+##  git-auto -s origin -p ;; set remote server
+##  git-auto -p ;; auto commit and push
+##  git-auto -r ;; auto commit, rebase, merge, push
 ##  git-auto -o -p;; execute once
 
-
-#set -e
+set -eu
 #set -x
+script_name="$(basename "$0")"
 
-usage="usage: $0
+usage="usage: $script_name
     [-d <git directory>]
     [-i <interval seconds>]
-    [-p <push to remote server>]
+    [-m <commit message (same for all commits)>]
+    [-b <git branch>]
+    [-s <git remote server>]
+    [-p push to remote server]
     [-r rebase before pushing changes]
-    [-s git remote server]
-    [-b git branch]
-    [-o <execute once]"
+    [-o execute once]
+    [-a allow multiple instances of the script]
+    [-e commit, [push, pull] on exit]"
 
-push_to_server=0
+interval=60
 server=origin
-interval=20
+push_to_server=0
+rebase=0
 once=0
+allow_multiple=0
+commit_on_exit=0
 
 OPTIND=1
-while getopts d:i:b:s:pro flag; do
-  case "${flag}" in
-  d) directory=${OPTARG} ;;
-  p) push_to_server=1 ;;
-  r) rebase=1 ;;
-  o) once=1 ;;
-  s) server=${OPTARG} ;;
-  b) branch=${OPTARG} ;;
-  i) interval=${OPTARG} ;;
-  *)
-    echo "ERROR: ${usage}" >&2
-    exit 1
-    ;;
-  esac
+while getopts d:i:m:b:s:proae flag; do
+    case "$flag" in
+    d) directory="$OPTARG" ;;
+    i) interval="$OPTARG" ;;
+    m) commit_message="$OPTARG" ;;
+    b) branch="$OPTARG" ;;
+    s) server="$OPTARG" ;;
+    p) push_to_server=1 ;;
+    r) rebase=1 ;;
+    o) once=1 ;;
+    a) allow_multiple=1 ;;
+    e) commit_on_exit=1 ;;
+    *)
+        echo "ERROR: Unknown option -$flag" >&2
+        echo "$usage" >&2
+        exit 1
+        ;;
+    esac
 done
 shift $((OPTIND - 1))
 
-if  [[ "${directory}" ]]; then
-  cd "${directory}" || exit 1
+if [ "$allow_multiple" = 0 ]; then
+    if pidof -o $$ -x "$script_name" >/dev/null; then
+        echo "$script_name already running"
+        exit 1
+    fi
 fi
 
-if [[ -z "${branch}" ]]; then
-  branch=$(git rev-parse --abbrev-ref HEAD)
+if [ -d "${directory-}" ]; then
+    cd "$directory"
 fi
 
-get-commit-message() {
-    local commit_message=$(git diff --name-only HEAD~1..HEAD)
-    commit_message=$(echo "${commit_message}" | sed -e 's/^.*\///')
-    echo "${commit_message}"
+if [ -z "${branch-}" ]; then
+    branch=$(git rev-parse --abbrev-ref HEAD)
+fi
+
+get_commit_message() {
+    if [ -z "${commit_message-}" ]; then
+        commit_message="$(git diff --name-only HEAD~1..HEAD)"
+        commit_message="$(echo "$commit_message" | sed -e 's/^.*\///')"
+    fi
 }
 
-auto-commit-and-push() {
-  if ! [[ $(git status) =~ "working tree clean" ]]; then
-    git add .
-    git commit -m "$(get-commit-message)"
-
-    if [[ 1 == ${rebase} ]]; then
-      git pull --rebase
+auto_commit() {
+    git_status="$(git status)"
+    # If we replace the term with nothing and it's still the same string
+    # then the string doesn't contain the term
+    if [ "$git_status" = "$(echo "$git_status" | sed 's/working tree clean//')" ]; then
+        git add .
+        get_commit_message
+        git commit -m "$commit_message"
     fi
 
-    if [[ 1 == "${push_to_server}" ]]; then
-      git push "${server}" "${branch}"
+    if [ 1 = "$push_to_server" ]; then
+
+        if [ 1 = "$rebase" ]; then
+            git pull --rebase "$server" "$branch"
+        else
+            git pull "$server" "$branch"
+        fi
+        git push "$server" "$branch"
+
     fi
-  fi
 }
 
-date
+if [ 1 = "$commit_on_exit" ] && [ 0 = "$once" ]; then
+    trap 'kill "$sleep_bg" 2>/dev/null; auto_commit; exit "$?"' INT HUP QUIT TERM
+fi 
 
-if [[ 1 == "${once}" ]]; then
-  auto-commit-and-push
+if [ 1 = "$once" ]; then
+    auto_commit
 else
-  while true; do
-    auto-commit-and-push
-    sleep "${interval}"
-  done
+    while true; do
+        auto_commit
+        # Put sleep in background & wait in order for trap to be executed right away on signal
+        # https://stackoverflow.com/questions/27694818/interrupt-sleep-in-bash-with-a-signal-trap
+        sleep "$interval" &
+        sleep_bg="$!"
+        wait "$sleep_bg"
+    done
 fi

@@ -13,16 +13,28 @@ chmod +x git-auto
 ./git-auto
 ```
 
+```sh
+# Auto run on opening logseq on linux
+# Modify logseq desktop entry, e.g in /usr/share/applications/logseq-desktop.desktop
+Exec=/bin/sh -c "/path/to/git-auto -d /path/to/logseq -pr & bg=$!; logseq; kill $bg"
+```
+
+Default behaviour:
+- The script will exit if there is already another instance of it running, use `-a` to bypass this.
+- If it is interrupted before the next commit/push interval, the current changes will not be committed/pushed. Use `-e` to always make a final commit/push upon exit.
+
 More samples:
 
 ```
-git-auto # use current script dir as git dir, and auto commit, not push.
-git-auto -d /path/to/your/note's/dir   # set git dir
-git-auto -p # auto commit and push
-git-auto -s origin -p # set remote server
-git-auto -b main -p # set git branch
-git-auto -i 30 -p # set interval seconds
-git-auto -o -p # execute once
+##  git-auto ;; use current script dir as git dir, and auto commit, not push.
+##  git-auto -d /path/to/your/note's/dir   ;; set git dir
+##  git-auto -i 30 -p ;; set interval seconds
+##  git-auto -m "Commit from desktop" ;; set commit message for all commits
+##  git-auto -b main -p ;; set git branch
+##  git-auto -s origin -p ;; set remote server
+##  git-auto -p ;; auto commit and push
+##  git-auto -r ;; auto commit, rebase, merge, push
+##  git-auto -o -p;; execute once
 ```
 
 ## For Windows Users
